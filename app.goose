@@ -4,9 +4,16 @@ import .adapter;
 import .context;
 
 fn handle(c:Context) {
-    if c.path =="/health" {
-        c.text(200, "ok\n");
-    } else {
+    if c.route("GET", "/greet") {
+        let name = c.query("name");
+        if name == "" {
+            c.text(200, "hello, world\n");
+        } else {
+            c.text(200, name);
+        }
+    }
+
+    if !c.handled {
         c.not_found();
     }
 }

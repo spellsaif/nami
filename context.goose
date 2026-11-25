@@ -6,6 +6,7 @@ struct Context {
     path: const u8[:],
     body: const u8[:],
     out: http::Reply,
+    handled: bool = false,
 }
 
 fn text(c: Context, status: i32, msg: const u8[:]) {
@@ -18,4 +19,21 @@ fn json_raw(c:Context, status: i32, raw_json: const u8[:]){
 
 fn not_found(c: Context) {
     c.json_raw(404, "{\"error\":\"not_found\"}");
+}
+
+fn query(c: Context, key: const u8[:]) -> const u8[:] {
+    let val, ok = http::query_of(c.target, key);
+
+    if !ok {
+        return "";
+    }
+    return val;
+}
+
+
+fn route(c: Context, method: const u8[:], path: const u8[:]) -> bool {
+    if !c.handled && c.method == method && c.path == path {
+        return true;
+    }
+    return false;
 }
