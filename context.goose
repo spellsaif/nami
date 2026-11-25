@@ -37,3 +37,29 @@ fn route(c: Context, method: const u8[:], path: const u8[:]) -> bool {
     }
     return false;
 }
+
+fn match_prefix(c: Context&, method: const u8[:], prefix: const u8[:]) -> bool {
+    if c.handled || c.method != method {
+        return false;
+    }
+    let p_len = prefix.len;
+    if c.path.len < p_len {
+        return false;
+    }
+    var i = 0;
+    while i < p_len {
+        if c.path[i] != prefix[i] {
+            return false;
+        }
+        i = i + 1;
+    }
+    return true;
+}
+
+fn path_tail(c: Context, prefix: const u8[:]) -> const u8[:] {
+    let p_len = prefix.len;
+    if c.path.len <= p_len {
+        return "";
+    }
+    return c.path;
+}

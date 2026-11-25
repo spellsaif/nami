@@ -13,6 +13,18 @@ fn handle(c:Context) {
         }
     }
 
+    if c.match_prefix("GET", "/users/") {
+        c.text(200, c.path);
+    }
+
+    if c.route("POST", "/echo") {
+        if c.body.len == 0 {
+            c.json_raw(400, "{\"error\":\"empty_body\"}\n");
+        } else {
+            c.json_raw(200, c.body);
+        }
+    }
+
     if !c.handled {
         c.not_found();
     }
