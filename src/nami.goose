@@ -3,6 +3,16 @@ import .context;
 
 namespace nami;
 
+struct App {
+    config: http::Config,
+}
+
+fn new(config: http::Config) -> App {
+    return App {
+        config: config,
+    };
+}
+
 fn execute<F: fn(Context&)>(c: Context&) {
     F(c);
 }
@@ -40,6 +50,6 @@ thread_fn worker(cfg: http::Config) {
     http::report(e);
 }
 
-fn run(cfg: http::Config) {
-    http::run(cfg, worker);
+fn run(app: App) {
+    http::run(app.config, worker);
 }

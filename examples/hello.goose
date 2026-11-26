@@ -7,5 +7,7 @@ fn main() {
         ..
     };
 
-    nami::run(cfg);
+    let app = nami::new(cfg);
+
+    app.run();
 }
