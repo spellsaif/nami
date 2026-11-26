@@ -3,15 +3,23 @@ import .context;
 
 namespace nami;
 
+fn execute<F: fn(Context&)>(c: Context&) {
+    F(c);
+}
+
 fn dispatch(c: Context&) {
     var r = http::router(c.req);
 
     if http::on(r, "GET", "/") {
-        c.text(200, "Hello, Nami!");
+        execute(c) {
+            ctx => ctx.text(200, "Hello, Nami!");
+        }
     } else if http::on(r, "GET", "/anime/:name") {
         let name = http::param(r, "name");
 
-        http::respond(c.out, 200, "text/plain", name);
+        execute(c) {
+            ctx => ctx.text(200, name);
+        }
     } else {
         http::otherwise(r, c.out);
     }
