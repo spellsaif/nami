@@ -7,13 +7,21 @@ fn write_value<T>(out: u8[>..]&, value: T) {
         json::format_bool(out, value);
     } else const if same<T, const u8[:]> {
         json::format_string(out, value);
-    } 
+    } else {
+        serialize(out, value);
+    }
 }
 
 struct Anime {
     id: i64,
     name: const u8[:],
     watched: bool,
+    character: Character,
+}
+
+struct Character {
+    id: i64,
+    name: const u8[:],
 }
 
 fn serialize<T>(out: u8[>..]&, value: T&) {
@@ -40,6 +48,10 @@ fn main() {
         id: 1,
         name: "Moonlit Fantasy",
         watched: true,
+        character: Character {
+            id: 1,
+            name: "Mio",
+        }
     };
 
     var output: u8[>..] = [];
