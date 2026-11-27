@@ -24,6 +24,23 @@ struct Character {
     name: const u8[:],
 }
 
+fn serialize_array<T>(out: u8[>..]&, values: T[:]) {
+    out.push('[');
+
+    var first = true;
+
+    for value in values {
+        if !first {
+            out.push(',')
+        }
+
+        first = false;
+        write_value(out, value);
+    }
+
+    out.push(']');
+}
+
 fn serialize<T>(out: u8[>..]&, value: T&) {
     out.push('{');
 
@@ -58,4 +75,11 @@ fn main() {
     serialize(output, anime);
 
     print(output);
+
+    var arr: u8[>..] = [];
+
+    let anime_list = ["Naruto", "One Piece", "Death Note", "Attack on Titan", "ReLife", "Origairu"];
+
+    serialize_array(arr, anime_list);
+    print(arr);
 }
